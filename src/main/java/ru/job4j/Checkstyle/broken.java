@@ -18,6 +18,7 @@ public class Broken {
         }
     }
 
-    public void method(int a, int b, int c, int d, int e, int f, int g, int h) {
+    public void method(int a, int b, int c, int d, int e, int f, int g) {
     }
 }
+
