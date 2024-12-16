@@ -1,37 +1,29 @@
 package ru.job4j.tracker;
 
-import java.util.Scanner;
-
 public class StartUI {
-    public void init(Scanner scanner, Tracker tracker) {
-        boolean run = true;
-        while (run) {
-            showMenu();
-            System.out.print("Выбрать: ");
-            int select = Integer.parseInt(scanner.nextLine());
-            if (select != 6) {
-                System.out.println("Пользователь выбрал: " + select);
-            } else {
-                run = false;
-            }
-        }
-    }
-
-    private void showMenu() {
-        String[] menu = {
-                "Добавить новую заявку", "Показать все заявки", "Изменить заявку",
-                "Удалить заявку", "Показать заявку по id", "Показать заявки по имени",
-                "Завершить программу"
-        };
-        System.out.println("Меню:");
-        for (int i = 0; i < menu.length; i++) {
-            System.out.println(i + ". " + menu[i]);
-        }
-    }
-
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         Tracker tracker = new Tracker();
-        new StartUI().init(scanner, tracker);
+
+        Item item1 = new Item("First Item");
+        Item item2 = new Item("Second Item");
+        Item item3 = new Item("First Item");
+
+                tracker.add(item1);
+        tracker.add(item2);
+        tracker.add(item3);
+
+                System.out.println("All items:");
+        for (Item item : tracker.findAll()) {
+            System.out.println(item);
+        }
+
+                System.out.println("\nFind by ID (1):");
+        Item foundById = tracker.findById(1);
+        System.out.println(foundById != null ? foundById : "Item not found");
+
+                System.out.println("\nFind by name ('First Item'):");
+        for (Item item : tracker.findByName("First Item")) {
+            System.out.println(item);
+        }
     }
 }
