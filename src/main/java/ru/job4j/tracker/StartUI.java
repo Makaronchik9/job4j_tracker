@@ -1,10 +1,17 @@
 package ru.job4j.tracker;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class StartUI {
-    public void init(Scanner scanner, Tracker tracker) {
+    private final Scanner scanner;
+    private final Tracker tracker;
+
+        public StartUI(Scanner scanner, Tracker tracker) {
+        this.scanner = scanner;
+        this.tracker = tracker;
+    }
+
+        public void init() {
         boolean run = true;
         while (run) {
             showMenu();
@@ -37,28 +44,19 @@ public class StartUI {
                 if (tracker.replace(id, item)) {
                     System.out.println("Заявка изменена успешно.");
                 } else {
-                    System.out.println("Ошибка замены заявки.");
+                    System.out.println("Ошибка замены заявки. Заявка с таким id не найдена.");
                 }
             } else if (select == 6) {
                 run = false;
             }
         }
     }
-    private void showMenu() {
-        String[] menu = {
-                "Добавить новую заявку", "Показать все заявки", "Изменить заявку",
-                "Удалить заявку", "Показать заявку по id", "Показать заявки по имени",
-                "Завершить программу"
-        };
-        System.out.println("Меню:");
-        for (int i = 0; i < menu.length; i++) {
-            System.out.println(i + ". " + menu[i]);
-        }
-    }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Tracker tracker = new Tracker();
-        new StartUI().init(scanner, tracker);
+        public void showMenu() {
+        System.out.println("Меню:");
+        System.out.println("0. Добавить заявку");
+        System.out.println("1. Показать все заявки");
+        System.out.println("2. Редактировать заявку");
+        System.out.println("6. Выход");
     }
 }
