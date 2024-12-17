@@ -16,7 +16,14 @@ public class StartUI {
         while (run) {
             showMenu();
             System.out.print("Выбрать: ");
-            int select = Integer.parseInt(scanner.nextLine());
+            int select = -1;
+            try {
+                select = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Ошибка ввода! Пожалуйста, введите число.");
+                continue;
+            }
+
             if (select == 0) {
                 System.out.println("=== Создание новой заявки ===");
                 System.out.print("Введите имя: ");
@@ -26,9 +33,9 @@ public class StartUI {
                 System.out.println("Добавленная заявка: " + item);
             } else if (select == 1) {
                 System.out.println("=== Вывод всех заявок ===");
-                Item[] items = tracker.findAll();
-                if (items.length > 0) {
-                    for (Item item : items) {
+                List<Item> itemsList = tracker.findAll();
+                if (!itemsList.isEmpty()) {
+                    for (Item item : itemsList) {
                         System.out.println(item);
                     }
                 } else {
@@ -37,24 +44,28 @@ public class StartUI {
             } else if (select == 2) {
                 System.out.println("=== Редактирование заявки ===");
                 System.out.print("Введите id: ");
-                int id = Integer.parseInt(scanner.nextLine());
+                int id = -1;
+                try {
+                    id = Integer.parseInt(scanner.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("Ошибка ввода! Пожалуйста, введите корректный id.");
+                    continue;
+                }
+
                 System.out.print("Введите имя: ");
                 String name = scanner.nextLine();
                 Item item = new Item(name);
+
                 if (tracker.replace(id, item)) {
                     System.out.println("Заявка изменена успешно.");
                 } else {
-                    System.out.println("Ошибка замены заявки.");
+                    System.out.println("Ошибка замены заявки. Заявка с таким id не найдена.");
                 }
-            } else if (select == 3) {
-                System.out.println("=== Удаление заявки ===");
-                System.out.print("Введите id: ");
-                int id = Integer.parseInt(scanner.nextLine());
-                Item item = tracker.findById(id);
-                tracker.delete(id);
-                System.out.println(item != null ? "Заявка удалена успешно." : "Ошибка удаления заявки.");
             } else if (select == 6) {
+                System.out.println("Выход из программы.");
                 run = false;
+            } else {
+                System.out.println("Некорректный выбор! Пожалуйста, выберите правильный пункт меню.");
             }
         }
     }
