@@ -5,10 +5,12 @@ public class Bus implements Transport {
     public void move() {
         System.out.println("Автобус едет.");
     }
+
     @Override
     public void passengers(int count) {
         System.out.println("Количество пассажиров: " + count);
     }
+
     @Override
     public int refuel(int fuel) {
         int fuelPrice = 50;
