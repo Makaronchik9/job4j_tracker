@@ -1,5 +1,6 @@
 package ru.job4j.tracker;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class StartUI {
@@ -8,26 +9,33 @@ public class StartUI {
         while (run) {
             showMenu();
             System.out.print("Выбрать: ");
-            int select = Integer.parseInt(scanner.nextLine());
-            if (select == 0) {
-                System.out.println("=== Создание новой заявки ===");
-                System.out.print("Введите имя: ");
-                String name = scanner.nextLine();
-                Item item = new Item(name);
-                tracker.add(item);
-                System.out.println("Добавленная заявка: " + item);
-            } else if (select == 1) {
-                System.out.println("=== Вывод всех заявок ===");
-                Item[] items = tracker.findAll();
-                if (items.length > 0) {
-                    for (Item item : items) {
-                        System.out.println(item);
+            try {
+                int select = Integer.parseInt(scanner.nextLine());
+                if (select == 0) {
+                    System.out.println("=== Создание новой заявки ===");
+                    System.out.print("Введите имя: ");
+                    String name = scanner.nextLine();
+                    Item item = new Item(name);
+                    tracker.add(item);
+                    System.out.println("Добавленная заявка: " + item);
+                } else if (select == 1) {
+                    System.out.println("=== Вывод всех заявок ===");
+                    List<Item> items = tracker.findAll();
+                    if (!items.isEmpty()) {
+                        for (Item item : items) {
+                            System.out.println(item);
+                        }
+                    } else {
+                        System.out.println("Хранилище еще не содержит заявок");
                     }
+                } else if (select == 6) {
+                    System.out.println("Завершение программы...");
+                    run = false;
                 } else {
-                    System.out.println("Хранилище еще не содержит заявок");
+                    System.out.println("Некорректный ввод. Пожалуйста, выберите пункт из меню.");
                 }
-            } else if (select == 6) {
-                run = false;
+            } catch (NumberFormatException e) {
+                System.out.println("Ошибка ввода. Введите корректный номер из меню.");
             }
         }
     }
