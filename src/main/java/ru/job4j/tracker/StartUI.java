@@ -3,27 +3,12 @@ package ru.job4j.tracker;
 import java.util.Scanner;
 
 public class StartUI {
-    private final Scanner scanner;
-    private final Tracker tracker;
-
-    public StartUI(Scanner scanner, Tracker tracker) {
-        this.scanner = scanner;
-        this.tracker = tracker;
-    }
-
-    public void init() {
+    public void init(Scanner scanner, Tracker tracker) {
         boolean run = true;
         while (run) {
             showMenu();
             System.out.print("Выбрать: ");
-            int select = -1;
-            try {
-                select = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Ошибка ввода! Пожалуйста, введите число.");
-                continue;
-            }
-
+            int select = Integer.parseInt(scanner.nextLine());
             if (select == 0) {
                 System.out.println("=== Создание новой заявки ===");
                 System.out.print("Введите имя: ");
@@ -31,50 +16,27 @@ public class StartUI {
                 Item item = new Item(name);
                 tracker.add(item);
                 System.out.println("Добавленная заявка: " + item);
-            } else if (select == 1) {
-                System.out.println("=== Вывод всех заявок ===");
-                List<Item> itemsList = tracker.findAll();
-                if (!itemsList.isEmpty()) {
-                    for (Item item : itemsList) {
-                        System.out.println(item);
-                    }
-                } else {
-                    System.out.println("Хранилище еще не содержит заявок");
-                }
-            } else if (select == 2) {
-                System.out.println("=== Редактирование заявки ===");
-                System.out.print("Введите id: ");
-                int id = -1;
-                try {
-                    id = Integer.parseInt(scanner.nextLine());
-                } catch (NumberFormatException e) {
-                    System.out.println("Ошибка ввода! Пожалуйста, введите корректный id.");
-                    continue;
-                }
-
-                System.out.print("Введите имя: ");
-                String name = scanner.nextLine();
-                Item item = new Item(name);
-
-                if (tracker.replace(id, item)) {
-                    System.out.println("Заявка изменена успешно.");
-                } else {
-                    System.out.println("Ошибка замены заявки. Заявка с таким id не найдена.");
-                }
             } else if (select == 6) {
-                System.out.println("Выход из программы.");
                 run = false;
-            } else {
-                System.out.println("Некорректный выбор! Пожалуйста, выберите правильный пункт меню.");
             }
         }
     }
 
-    public void showMenu() {
+    private void showMenu() {
+        String[] menu = {
+                "Добавить новую заявку", "Показать все заявки", "Изменить заявку",
+                "Удалить заявку", "Показать заявку по id", "Показать заявки по имени",
+                "Завершить программу"
+        };
         System.out.println("Меню:");
-        System.out.println("0. Добавить заявку");
-        System.out.println("1. Показать все заявки");
-        System.out.println("2. Редактировать заявку");
-        System.out.println("6. Выход");
+        for (int i = 0; i < menu.length; i++) {
+            System.out.println(i + ". " + menu[i]);
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Tracker tracker = new Tracker();
+        new StartUI().init(scanner, tracker);
     }
 }
