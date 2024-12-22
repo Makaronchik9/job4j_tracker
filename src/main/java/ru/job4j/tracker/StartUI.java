@@ -1,94 +1,53 @@
 package ru.job4j.tracker;
 
-import java.util.Scanner;
+import java.util.List;
 
 public class StartUI {
-    public void init(Scanner scanner, Tracker tracker) {
+    private final Output out;
+
+    public StartUI(Output out) {
+        this.out = out;
+    }
+
+    public void init(Input input, Store tracker, List<UserAction> actions) {
         boolean run = true;
         while (run) {
-            showMenu();
-            System.out.print("Выбрать: ");
-            int select = Integer.parseInt(scanner.nextLine());
-            if (select == 0) {
-                System.out.println("=== Создание новой заявки ===");
-                System.out.print("Введите имя: ");
-                String name = scanner.nextLine();
-                Item item = new Item(name);
-                tracker.add(item);
-                System.out.println("Добавленная заявка: " + item);
-            } else if (select == 1) {
-                System.out.println("=== Вывод всех заявок ===");
-                Item[] items = tracker.findAll();
-                if (items.length > 0) {
-                    for (Item item : items) {
-                        System.out.println(item);
-                    }
-                } else {
-                    System.out.println("Хранилище еще не содержит заявок");
-                }
-            } else if (select == 2) {
-                System.out.println("=== Редактирование заявки ===");
-                System.out.print("Введите id: ");
-                int id = Integer.parseInt(scanner.nextLine());
-                System.out.print("Введите имя: ");
-                String name = scanner.nextLine();
-                Item item = new Item(name);
-                if (tracker.replace(id, item)) {
-                    System.out.println("Заявка изменена успешно.");
-                } else {
-                    System.out.println("Ошибка замены заявки.");
-                }
-            } else if (select == 3) {
-                System.out.println("=== Удаление заявки ===");
-                System.out.print("Введите id: ");
-                int id = Integer.parseInt(scanner.nextLine());
-                Item item = tracker.findById(id);
-                tracker.delete(id);
-                System.out.println(item != null ? "Заявка удалена успешно." : "Ошибка удаления заявки.");
+            showMenu(actions);
+            int select = input.askInt("Select: ");
+            if (select < 0 || select >= actions.size()) {
+                out.println("Wrong input, you can select: 0 .. " + (actions.size() - 1));
+                continue;
             }
-            if (select == 4) {
-                System.out.println("=== Вывод заявки по id ===");
-                System.out.print("Введите id: ");
-                int id = Integer.parseInt(scanner.nextLine());
-                Item item = tracker.findById(id);
-                if (item != null) {
-                    System.out.println(item);
-                } else {
-                    System.out.println("Заявка с введенным id: " + id + " не найдена.");
-                }
-            } else if (select == 5) {
-                System.out.println("=== Вывод заявок по имени ===");
-                System.out.print("Введите имя: ");
-                String name = scanner.nextLine();
-                Item[] items = tracker.findByName(name);
-                if (items.length > 0) {
-                    for (Item item : items) {
-                        System.out.println(item);
-                    }
-                } else {
-                    System.out.println("Заявки с именем: " + name + " не найдены.");
-                }
-            } else if (select == 6) {
-                run = false;
-            }
+            UserAction action = actions.get(select);
+            run = action.execute(input, tracker);
         }
     }
 
-    private void showMenu() {
-        String[] menu = {
-                "Добавить новую заявку", "Показать все заявки", "Изменить заявку",
-                "Удалить заявку", "Показать заявку по id", "Показать заявки по имени",
-                "Завершить программу"
-        };
-        System.out.println("Меню:");
-        for (int i = 0; i < menu.length; i++) {
-            System.out.println(i + ". " + menu[i]);
+    private void showMenu(List<UserAction> actions) {
+        out.println("Menu:");
+        for (int i = 0; i < actions.size(); i++) {
+            out.println(i + ". " + actions.get(i).name());
         }
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Tracker tracker = new Tracker();
-        new StartUI().init(scanner, tracker);
+        Output output = new ConsoleOutput();
+        Input input = new ValidateInput(output, new ConsoleInput());
+        try (Store tracker = new SqlTracker()) {
+            List<UserAction> actions = List.of(
+                    new CreateAction(output),
+                    new CreateManyItems(output),
+                    new ShowAllAction(output),
+                    new EditAction(output),
+                    new DeleteAction(output),
+                    new DeleteAllItems(output),
+                    new FindItemIdAction(output),
+                    new FindItemByNameAction(output),
+                    new ExitAction(output)
+            );
+            new StartUI(output).init(input, tracker, actions);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
