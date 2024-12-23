@@ -12,7 +12,6 @@ class StartUITest {
 
         StartUI.createItem(input, tracker);
 
-        // Проверяем результат
         Item created = tracker.findAll()[0];
         Item expected = new Item("Fix PC");
 
