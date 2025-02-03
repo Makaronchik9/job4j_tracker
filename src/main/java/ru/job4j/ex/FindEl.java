@@ -14,6 +14,7 @@ public class FindEl {
         }
         return result;
     }
+
     public static void main(String[] args) {
         try {
             String[] array = {"Sunday", "Monday", "Wednesday", "Thursday"};
