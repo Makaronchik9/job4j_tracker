@@ -1,7 +1,7 @@
 package ru.job4j.tracker;
 
-public class MockInput implements Input {
-    private String[] answers;
+class MockInput implements Input {
+    private final String[] answers;
     private int position = 0;
 
     public MockInput(String[] answers) {
@@ -18,3 +18,4 @@ public class MockInput implements Input {
         return Integer.parseInt(askStr(question));
     }
 }
+
