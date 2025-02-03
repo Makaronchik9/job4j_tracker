@@ -15,7 +15,7 @@ class StartUITest {
                 new ReplaceAction(),
                 new ExitAction()
         };
-        new StartUI().init(input, tracker, actions);
+        new StartUI().init(input, tracker);
         assertThat(tracker.findById(item.getId()).getName()).isEqualTo("New name");
     }
 
@@ -30,7 +30,7 @@ class StartUITest {
                 new DeleteAction(),
                 new ExitAction()
         };
-        new StartUI().init(input, tracker, actions);
+        new StartUI().init(input, tracker);
         assertThat(tracker.findById(item.getId())).isNull();
     }
 }
