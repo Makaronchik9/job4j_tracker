@@ -1,5 +1,5 @@
 package ru.job4j.tracker;
 
 public interface Output {
-    void println(String message);
+    void println(Object obj);
 }
