@@ -13,7 +13,7 @@ public class Item {
     public Item(int id, String name) {
         this.id = id;
         this.name = name;
-        this.created = LocalDateTime.now(); // устанавливаем текущее время как время создания
+        this.created = LocalDateTime.now();
     }
 
     public int getId() {
