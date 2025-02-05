@@ -1,50 +1,60 @@
 package ru.job4j.tracker;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Item {
-    private int id;
-    private String name;
-    private LocalDateTime created;
+public class Tracker {
+    private final List<Item> items = new ArrayList<>();
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MMMM-EEEE-yyyy HH:mm:ss");
-
-    public Item() {
-        this.created = LocalDateTime.now();
+    public Item add(Item item) {
+        items.add(item);
+        return item;
     }
 
-    public Item(String name) {
-        this.name = name;
-        this.created = LocalDateTime.now();
+    public Item findById(int id) {
+        int index = indexOf(id);
+        return index != -1 ? items.get(index) : null;
     }
 
-    public int getId() {
-        return id;
+    public Item[] findAll() {
+        return items.toArray(new Item[0]);
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Item[] findByName(String name) {
+        List<Item> result = new ArrayList<>();
+        for (Item item : items) {
+            if (item.getName().equals(name)) {
+                result.add(item);
+            }
+        }
+        return result.toArray(new Item[0]);
     }
 
-    public String getName() {
-        return name;
+    public boolean replace(int id, Item newItem) {
+        int index = indexOf(id);
+        if (index != -1) {
+            newItem.setId(id);
+            items.set(index, newItem);
+            return true;
+        }
+        return false;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public boolean delete(int id) {
+        int index = indexOf(id);
+        if (index != -1) {
+            items.remove(index);
+            return true;
+        }
+        return false;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    @Override
-    public String toString() {
-        return "Item{"
-                + "id=" + id
-                + ", name='" + name + '\''
-                + ", created=" + created.format(FORMATTER)
-                + '}';
+    private int indexOf(int id) {
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getId() == id) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
