@@ -39,7 +39,6 @@ public class StartUI {
                 new ShowAllAction(output),
                 new EditAction(output),
                 new DeleteAction(output),
-                new FindItemIdAction(output),
                 new FindItemByNameAction(output),
                 new ExitAction()
         };
