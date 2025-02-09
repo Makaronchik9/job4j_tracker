@@ -33,7 +33,7 @@ public class Tracker {
     public boolean replace(int id, Item newItem) {
         int index = indexOf(id);
         if (index != -1) {
-            newItem.setId(id); // Устанавливаем ID на новый элемент для сохранения уникальности
+            newItem.setId(id);
             items.set(index, newItem);
             return true;
         }
