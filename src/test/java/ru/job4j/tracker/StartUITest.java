@@ -1,16 +1,10 @@
 package ru.job4j.tracker;
 
 import org.junit.jupiter.api.Test;
-import ru.job4j.tracker.action.*;
-import ru.job4j.tracker.input.Input;
-import ru.job4j.tracker.input.StubInput;
-import ru.job4j.tracker.output.ConsoleOutput;
-import ru.job4j.tracker.output.Output;
-import ru.job4j.tracker.output.StubOutput;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StartUITest {
+
     @Test
     public void whenCreateItem() {
         Output out = new ConsoleOutput();
@@ -23,6 +17,9 @@ public class StartUITest {
                 new ExitAction()
         };
         new StartUI(out).init(in, tracker, actions);
+
+        // Проверяем, что добавленный элемент имеет правильное имя
+        assertThat(tracker.findAll()).isNotEmpty();
         assertThat(tracker.findAll()[0].getName()).isEqualTo("Item name");
     }
 
@@ -30,7 +27,8 @@ public class StartUITest {
     public void whenReplaceItem() {
         Output out = new StubOutput();
         Tracker tracker = new Tracker();
-        Item item = tracker.add(new Item("Replaced item")); /* Добавляется в tracker новая заявка */
+        Item item = new Item(1, "Replaced item"); // Создаем элемент с ID 1
+        tracker.add(item); // Добавляем элемент в трекер
         String replacedName = "New item name";
         Input in = new StubInput(
                 new String[]{"0", String.valueOf(item.getId()), replacedName, "1"}
@@ -40,6 +38,8 @@ public class StartUITest {
                 new ExitAction()
         };
         new StartUI(out).init(in, tracker, actions);
+
+        // Проверяем, что элемент был успешно заменен
         assertThat(tracker.findById(item.getId()).getName()).isEqualTo(replacedName);
     }
 
@@ -47,7 +47,8 @@ public class StartUITest {
     public void whenDeleteItem() {
         Output out = new StubOutput();
         Tracker tracker = new Tracker();
-        Item item = tracker.add(new Item("Deleted item")); /* Добавляется в tracker новая заявка */
+        Item item = new Item(1, "Deleted item"); // Создаем элемент с ID 1
+        tracker.add(item); // Добавляем элемент в трекер
         Input in = new StubInput(
                 new String[]{"0", String.valueOf(item.getId()), "1"}
         );
@@ -56,6 +57,8 @@ public class StartUITest {
                 new ExitAction()
         };
         new StartUI(out).init(in, tracker, actions);
+
+        // Проверяем, что элемент был удален
         assertThat(tracker.findById(item.getId())).isNull();
     }
 
@@ -63,13 +66,15 @@ public class StartUITest {
     public void whenExit() {
         Output out = new StubOutput();
         Input in = new StubInput(
-                new String[] {"0"}
+                new String[]{"0"}
         );
         Tracker tracker = new Tracker();
         UserAction[] actions = {
                 new ExitAction()
         };
         new StartUI(out).init(in, tracker, actions);
+
+        // Проверяем корректность вывода меню
         assertThat(out.toString()).isEqualTo(
                 "Menu." + System.lineSeparator()
                         + "0. Exit" + System.lineSeparator()
