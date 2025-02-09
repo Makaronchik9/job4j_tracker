@@ -1,17 +1,17 @@
 package ru.job4j.tracker;
 
 public class ValidateInput implements Input {
-    private final Output out;
-    private final Input in;
+    private final Output output;
+    private final Input input;
 
-    public ValidateInput(Output out, Input input) {
-        this.out = out;
-        this.in = input;
+    public ValidateInput(Output output, Input input) {
+        this.output = output;
+        this.input = input;
     }
 
     @Override
     public String askStr(String question) {
-        return in.askStr(question);
+        return input.askStr(question);
     }
 
     @Override
@@ -20,10 +20,10 @@ public class ValidateInput implements Input {
         int value = -1;
         do {
             try {
-                value = in.askInt(question);
+                value = input.askInt(question);
                 invalid = false;
             } catch (NumberFormatException nfe) {
-                out.println("Please enter valid data");
+                output.println("Пожалуйста, введите корректные данные");
             }
         } while (invalid);
         return value;
