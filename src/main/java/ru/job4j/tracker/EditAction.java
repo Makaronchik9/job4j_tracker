@@ -1,9 +1,4 @@
-package ru.job4j.tracker.action;
-
-import ru.job4j.tracker.input.Input;
-import ru.job4j.tracker.Item;
-import ru.job4j.tracker.output.Output;
-import ru.job4j.tracker.Tracker;
+package ru.job4j.tracker;
 
 public class EditAction implements UserAction {
     private final Output out;
@@ -22,7 +17,7 @@ public class EditAction implements UserAction {
         out.println("=== Edit item ===");
         int id = input.askInt("Enter id: ");
         String name = input.askStr("Enter name: ");
-        Item item = new Item(name);
+        Item item = new Item(1, "New Item");
         if (tracker.replace(id, item)) {
             out.println("Заявка изменена успешно.");
         } else {

@@ -4,25 +4,27 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Item {
-    private static final DateTimeFormatter FORMATTER =
-            DateTimeFormatter.ofPattern("dd-MMMM-EEEE-yyyy HH:mm:ss");
-
     private int id;
     private String name;
-    private LocalDateTime created;
 
-    public Item(int id, String name, LocalDateTime created) {
+    // Конструктор
+    public Item(int id, String name) {
         this.id = id;
         this.name = name;
-        this.created = created;
     }
 
-    @Override
-    public String toString() {
-        return "Item{"
-                + "id=" + id
-                + ", name='" + name + '\''
-                + ", created=" + created.format(FORMATTER)
-                + '}';
+    // Геттер для ID
+    public int getId() {
+        return id;
+    }
+
+    // Геттер для имени
+    public String getName() {
+        return name;
+    }
+
+    // Сеттер для ID
+    public void setId(int id) {
+        this.id = id;
     }
 }
