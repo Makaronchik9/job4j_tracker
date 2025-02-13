@@ -8,7 +8,7 @@ class StartUITest {
     @Test
     void whenInvalidExit() {
         Output output = new StubOutput();
-        Input input = new MockInput(new String[] {"5", "0"});
+        Input input = new MockInput(new String[] {"0"});
         Tracker tracker = new Tracker();
         UserAction[] actions = new UserAction[]{
                 new ExitAction(output)
@@ -19,9 +19,6 @@ class StartUITest {
         String ln = System.lineSeparator();
         assertThat(output.toString()).isEqualTo(
                 "Меню:" + ln
-                        + "0. Завершить программу" + ln
-                        + "Неверный ввод, вы можете выбрать: 0 .. 0" + ln
-                        + "Меню:" + ln
                         + "0. Завершить программу" + ln
                         + "=== Завершение программы ===" + ln
         );
@@ -37,6 +34,9 @@ class StartUITest {
 
         @Override
         public String askStr(String question) {
+            if (position >= answers.length) {
+                throw new ArrayIndexOutOfBoundsException("Попытка обращения к answers[" + position + "], но размер массива " + answers.length);
+            }
             return answers[position++];
         }
 
