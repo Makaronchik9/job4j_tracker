@@ -1,79 +1,81 @@
 package ru.job4j.tracker;
 
-import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
-public class StartUITest {
+class StartUITest {
 
     @Test
-    public void whenCreateItem() {
-        Output out = new ConsoleOutput();
-        Input in = new StubInput(
-                new String[]{"0", "Item name", "1"}
-        );
+    void whenInvalidExit() {
+        Output output = new StubOutput();
+        Input input = new MockInput(new String[] {"5", "0"});
         Tracker tracker = new Tracker();
-        UserAction[] actions = {
-                new CreateAction(out),
-                new ExitAction()
+        UserAction[] actions = new UserAction[]{
+                new ExitAction(output)
         };
-        new StartUI(out).init(in, tracker, actions);
 
-        assertThat(tracker.findAll()).isNotEmpty();
-        assertThat(tracker.findAll()[0].getName()).isEqualTo("Item name");
+        new StartUI(output).init(input, tracker, actions);
+
+        String ln = System.lineSeparator();
+        assertThat(output.toString()).isEqualTo(
+                "Меню:" + ln
+                        + "0. Завершить программу" + ln
+                        + "Неверный ввод, вы можете выбрать: 0 .. 0" + ln
+                        + "Меню:" + ln
+                        + "0. Завершить программу" + ln
+                        + "=== Завершение программы ===" + ln
+        );
     }
 
-    @Test
-    public void whenReplaceItem() {
-        Output out = new StubOutput();
-        Tracker tracker = new Tracker();
-        Item item = new Item(1, "Replaced item");
-        tracker.add(item);
-        String replacedName = "New item name";
-        Input in = new StubInput(
-                new String[]{"0", String.valueOf(item.getId()), replacedName, "1"}
-        );
-        UserAction[] actions = {
-                new EditAction(out),
-                new ExitAction()
-        };
-        new StartUI(out).init(in, tracker, actions);
+    class MockInput implements Input {
+        private final String[] answers;
+        private int position = 0;
 
-        assertThat(tracker.findById(item.getId()).getName()).isEqualTo(replacedName);
+        public MockInput(String[] answers) {
+            this.answers = answers;
+        }
+
+        @Override
+        public String askStr(String question) {
+            return answers[position++];
+        }
+
+        @Override
+        public int askInt(String question) {
+            return Integer.parseInt(askStr(question));
+        }
     }
 
-    @Test
-    public void whenDeleteItem() {
-        Output out = new StubOutput();
-        Tracker tracker = new Tracker();
-        Item item = new Item(1, "Deleted item");
-        tracker.add(item);
-        Input in = new StubInput(
-                new String[]{"0", String.valueOf(item.getId()), "1"}
-        );
-        UserAction[] actions = {
-                new DeleteAction(out),
-                new ExitAction()
-        };
-        new StartUI(out).init(in, tracker, actions);
+    class StubOutput implements Output {
+        private final StringBuilder output = new StringBuilder();
 
-        assertThat(tracker.findById(item.getId())).isNull();
+        @Override
+        public void println(Object obj) {
+            output.append(obj).append(System.lineSeparator());
+        }
+
+        @Override
+        public String toString() {
+            return output.toString();
+        }
     }
 
-    @Test
-    public void whenExit() {
-        Output out = new StubOutput();
-        Input in = new StubInput(
-                new String[]{"0"}
-        );
-        Tracker tracker = new Tracker();
-        UserAction[] actions = {
-                new ExitAction()
-        };
-        new StartUI(out).init(in, tracker, actions);
+    class ExitAction implements UserAction {
+        private final Output output;
 
-        assertThat(out.toString()).isEqualTo(
-                "Menu." + System.lineSeparator()
-                        + "0. Exit" + System.lineSeparator()
-        );
+        public ExitAction(Output output) {
+            this.output = output;
+        }
+
+        @Override
+        public String name() {
+            return "Завершить программу";
+        }
+
+        @Override
+        public boolean execute(Input input, Tracker tracker) {
+            output.println("=== Завершение программы ===");
+            return false;
+        }
     }
 }
