@@ -16,16 +16,16 @@ public class ValidateInput implements Input {
 
     @Override
     public int askInt(String question) {
-        boolean invalid = true;
-        int value = -1;
-        do {
+        int value;
+        while (true) {
             try {
-                value = input.askInt(question);
-                invalid = false;
-            } catch (NumberFormatException nfe) {
-                output.println("Пожалуйста, введите корректные данные");
+                value = Integer.parseInt(input.askStr(question));
+                break;
+            } catch (NumberFormatException e) {
+                output.println("Invalid input. Please enter a valid number.");
             }
-        } while (invalid);
+        }
         return value;
     }
 }
+
