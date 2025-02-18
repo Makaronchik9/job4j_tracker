@@ -17,11 +17,16 @@ class StartUITest {
         new StartUI(output).init(input, tracker, actions);
         String ln = System.lineSeparator();
         assertThat(output.toString()).isEqualTo(
-                "Меню:" + ln +
-                        "0. Завершить программу" + ln +
-                        "Ошибка: некорректный ввод. Введите число от 0 до 0" + ln +
-                        "Меню:" + ln +
-                        "0. Завершить программу" + ln +
+                "Меню:" + ln
+                        +
+                        "0. Завершить программу" + ln
+                        +
+                        "Ошибка: некорректный ввод. Введите число от 0 до 0" + ln
+                        +
+                        "Меню:" + ln
+                        +
+                        "0. Завершить программу" + ln
+                        +
                         "=== Завершение программы ===" + ln
         );
     }
