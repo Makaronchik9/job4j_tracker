@@ -19,6 +19,7 @@ public class StartUI {
             UserAction action = actions[select];
             run = action.execute(input, tracker);
         }
+        output.println("=== Завершение программы ===");
     }
 
     private void showMenu(UserAction[] actions) {
@@ -28,3 +29,4 @@ public class StartUI {
         }
     }
 }
+
