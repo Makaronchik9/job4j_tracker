@@ -16,18 +16,18 @@ public class Tracker {
         return index != -1 ? items.get(index) : null;
     }
 
-    public Item[] findAll() {
-        return items.toArray(new Item[0]);
+    public List<Item> findAll() {
+        return new ArrayList<>(items);
     }
 
-    public Item[] findByName(String name) {
+    public List<Item> findByName(String name) {
         List<Item> result = new ArrayList<>();
         for (Item item : items) {
             if (item.getName().equals(name)) {
                 result.add(item);
             }
         }
-        return result.toArray(new Item[0]);
+        return result;
     }
 
     public boolean replace(int id, Item newItem) {
