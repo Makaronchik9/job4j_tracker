@@ -20,7 +20,6 @@ public class AppleStore {
             if (i < count) {
                 result = customer.name();
             }
-            queue.add(customer);
         }
         return result;
     }
