@@ -1,11 +1,11 @@
 package ru.job4j.queue;
 
 import java.util.Deque;
+import java.util.LinkedList;
 
 public class ReconstructPhrase {
 
     private final Deque<Character> descendingElements;
-
     private final Deque<Character> evenElements;
 
     public ReconstructPhrase(Deque<Character> descendingElements, Deque<Character> evenElements) {
@@ -15,23 +15,20 @@ public class ReconstructPhrase {
 
     private String getEvenElements() {
         StringBuilder str = new StringBuilder();
-        int evenElementsSize = evenElements.size();
-        for (int i = 0; i < evenElementsSize; i++) {
-            char currentChar = evenElements.poll();
-            if (i % 2 == 0) {
-                str.append(currentChar);
+        int index = 0;
+        for (Character c : evenElements) {
+            if (index % 2 == 0) {
+                str.append(c);
             }
-            evenElements.addLast(currentChar);
+            index++;
         }
         return str.toString();
     }
 
     private String getDescendingElements() {
         StringBuilder str = new StringBuilder();
-        int descendingElementsSize = descendingElements.size();
-        for (int i = 0; i < descendingElementsSize; i++) {
-            char currentChar = descendingElements.pollLast();
-            str.append(currentChar);
+        for (Character c : descendingElements) {
+            str.insert(0, c);
         }
         return str.toString();
     }
