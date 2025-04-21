@@ -13,7 +13,9 @@ public class AppleStore {
 
     public String getLastHappyCustomer() {
         String result = null;
-        for (int i = 0; i < count && !queue.isEmpty(); i++) result = queue.poll().name();
+        for (int i = 0; i < count && !queue.isEmpty(); i++) {
+            result = queue.poll().name();
+        }
         return result;
     }
 
