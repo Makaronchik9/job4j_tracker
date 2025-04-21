@@ -1,6 +1,7 @@
 package ru.job4j.queue;
 
 import java.util.Queue;
+import java.util.LinkedList;
 
 public class AppleStore {
     private final Queue<Customer> queue;
@@ -13,13 +14,14 @@ public class AppleStore {
 
     public String getLastHappyCustomer() {
         String result = null;
-        for (int i = 0; i < count && !queue.isEmpty(); i++) {
-            result = queue.poll().name();
-        }
+        Queue<Customer> copyQueue = new LinkedList<>(queue); // создаём копию очереди
+        for (int i = 0; i < count; i++) result = copyQueue.poll().name(); // одна строка
         return result;
     }
 
     public String getFirstUpsetCustomer() {
-        return queue.isEmpty() ? null : queue.peek().name();
+        Queue<Customer> copyQueue = new LinkedList<>(queue); // создаём копию очереди
+        for (int i = 0; i < count; i++) copyQueue.poll(); // пропускаем счастливых
+        return copyQueue.isEmpty() ? null : copyQueue.peek().name(); // первая расстроенная
     }
 }
