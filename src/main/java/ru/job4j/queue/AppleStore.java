@@ -14,14 +14,18 @@ public class AppleStore {
 
     public String getLastHappyCustomer() {
         String result = null;
-        Queue<Customer> copyQueue = new LinkedList<>(queue); // создаём копию очереди
-        for (int i = 0; i < count; i++) result = copyQueue.poll().name(); // одна строка
+        Queue<Customer> copyQueue = new LinkedList<>(queue);
+        for (int i = 0; i < count && !copyQueue.isEmpty(); i++) {
+            result = copyQueue.poll().name();
+        }
         return result;
     }
 
     public String getFirstUpsetCustomer() {
-        Queue<Customer> copyQueue = new LinkedList<>(queue); // создаём копию очереди
-        for (int i = 0; i < count; i++) copyQueue.poll(); // пропускаем счастливых
-        return copyQueue.isEmpty() ? null : copyQueue.peek().name(); // первая расстроенная
+        Queue<Customer> copyQueue = new LinkedList<>(queue);
+        for (int i = 0; i < count && !copyQueue.isEmpty(); i++) {
+            copyQueue.poll();
+        }
+        return copyQueue.isEmpty() ? null : copyQueue.peek().name();
     }
 }
