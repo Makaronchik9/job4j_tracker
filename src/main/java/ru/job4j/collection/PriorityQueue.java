@@ -23,7 +23,6 @@ public class PriorityQueue {
         return tasks.poll();
     }
 
-    // Новый метод поиска с предикатами
     public List<Task> find(String key) {
         Predicate<Task> byName = t -> t.getName().contains(key);
         Predicate<Task> byDescription = t -> t.getDescription().contains(key);
@@ -40,4 +39,3 @@ public class PriorityQueue {
                 .collect(Collectors.toList());
     }
 }
-

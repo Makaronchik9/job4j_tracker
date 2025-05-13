@@ -13,15 +13,15 @@ public class PhoneDictionary {
     }
 
     public List<Person> find(String key) {
-        Predicate<Person> byName = person -> person.getName().contains(key);
+        Predicate<Person> byName = p -> p.getName().contains(key);
+        Predicate<Person> bySurname = p -> p.getSurname().contains(key);
+        Predicate<Person> byPhone = p -> p.getPhone().contains(key);
+        Predicate<Person> byAddress = p -> p.getAddress().contains(key);
 
-        Predicate<Person> bySurname = person -> person.getSurname().contains(key);
-
-        Predicate<Person> byPhone = person -> person.getPhone().contains(key);
-
-        Predicate<Person> byAddress = person -> person.getAddress().contains(key);
-
-        Predicate<Person> combined = byName.or(bySurname).or(byPhone).or(byAddress);
+        Predicate<Person> combined = byName
+                .or(bySurname)
+                .or(byPhone)
+                .or(byAddress);
 
         return persons.stream()
                 .filter(combined)
