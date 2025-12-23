@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.time.LocalDateTime;
+
 public class ReplaceAction implements UserAction {
     private final Output output;
 
@@ -9,19 +11,20 @@ public class ReplaceAction implements UserAction {
 
     @Override
     public String name() {
-        return "Edit item";
+        return "Редактировать заявку";
     }
 
     @Override
-    public boolean execute(Input input, Tracker tracker) {
-        int id = input.askInt("Enter id: ");
-        String name = input.askStr("Enter new name: ");
-        Item newItem = new Item(id, name);
+    public boolean execute(Input input, Store tracker) {
+        int id = input.askInt("Введите id заявки: ");
+        String name = input.askStr("Введите новое имя: ");
+        Item newItem = new Item(id, name, LocalDateTime.now());
         if (tracker.replace(id, newItem)) {
-            output.println("Item replaced successfully.");
+            output.println("Заявка успешно изменена.");
         } else {
-            output.println("Item not found.");
+            output.println("Заявка с таким id не найдена.");
         }
         return true;
     }
 }
+
